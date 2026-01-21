@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="ANIMA ORÁCULOS - Hub de Consciência">
+    <meta name="theme-color" content="#d4af37">
+    <title>ANIMA ORÁCULOS — Hub de Consciência</title>
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="data:application/json;base64,ewogICJuYW1lIjogIkFOSU1BIE9Sw4FDVUxPUyIsCiAgInNob3J0X25hbWUiOiAiQU5JTUEiLAogICJkZXNjcmlwdGlvbiI6ICJIdWIgZGUgQ29uc2Npw6puY2lhIE9yYWN1bGFyIiwKICAic3RhcnRfdXJsIjogIi8iLAogICJkaXNwbGF5IjogInN0YW5kYWxvbmUiLAogICJiYWNrZ3JvdW5kX2NvbG9yIjogIiMxYTFhMmUiLAogICJ0aGVtZV9jb2xvciI6ICIjZDRhZjM3IiwKICAib3JpZW50YXRpb24iOiAicG9ydHJhaXQiCn0=">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #1a1a2e;
+            --secondary: #16213e;
+            --accent: #e94560;
+            --gold: #d4af37;
+            --text: #f1f1f1;
+            --text-dim: #b0b0b0;
+            --shadow: rgba(0, 0, 0, 0.4);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: var(--text);
+            min-height: 100vh;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Container Principal */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            padding-bottom: 100px;
+        }
+
+        /* Tela Inicial */
+        .welcome-screen {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            text-align: center;
+            padding: 20px;
+            position: relative;
+        }
+
+        .welcome-screen::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(212, 175, 55, 0.1) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: pulse 4s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
+            50% { transform: translate(-50%, -50%) scale(1.2); opacity: 0.8; }
+        }
+
+        .logo {
+            font-size: 3.5rem;
+            font-weight: 300;
+            letter-spacing: 12px;
+            margin-bottom: 2rem;
+            background: linear-gradient(45deg, var(--gold), #fff, var(--gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: glow 3s ease-in-out infinite;
+            position: relative;
+            z-index: 1;
+        }
+
+        @keyframes glow {
+            0%, 100% { opacity: 1; filter: brightness(1); }
+            50% { opacity: 0.8; filter: brightness(1.2); }
+        }
+
+        .welcome-text {
+            font-size: 1.3rem;
+            line-height: 2;
+            color: var(--text-dim);
+            max-width: 600px;
+            margin-bottom: 3rem;
+            font-style: italic;
+            position: relative;
+            z-index: 1;
+        }
+
+        .btn-explore {
+            padding: 20px 50px;
+            font-size: 1.1rem;
+            background: transparent;
+            border: 2px solid var(--gold);
+            color: var(--gold);
+            cursor: pointer;
+            transition: all 0.4s ease;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            font-weight: 600;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .btn-explore::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: var(--gold);
+            transition: width 0.6s, height 0.6s, top 0.6s, left 0.6s;
+            transform: translate(-50%, -50%);
+            z-index: -1;
+        }
+
+        .btn-explore:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .btn-explore:hover {
+            color: var(--primary);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(212, 175, 55, 0.4);
+        }
+
+        /* Menu de Oráculos */
+        .oracles-menu {
+            display: none;
+            animation: fadeIn 0.6s ease;
+        }
+
+        .oracles-menu.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .menu-header {
+            text-align: center;
+            margin: 40px 0 60px;
+        }
+
+        .menu-title {
+            font-size: 2.5rem;
+            font-weight: 300;
+            letter-spacing: 6px;
+            color: var(--gold);
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+        }
+
+        .menu-subtitle {
+            color: var(--text-dim);
+            font-size: 1.1rem;
+            font-style: italic;
+        }
+
+        /* Grid de Cards */
+        .oracles-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 28px;
+            margin-bottom: 40px;
+        }
+
+        /* Card do Oráculo */
+        .oracle-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+            padding: 36px;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .oracle-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, var(--gold), var(--accent));
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.4s ease;
+        }
+
+        .oracle-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at top right, rgba(212, 175, 55, 0.05), transparent);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .oracle-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .oracle-card:hover::after {
+            opacity: 1;
+        }
+
+        .oracle-card:hover {
+            transform: translateY(-10px);
+            border-color: rgba(212, 175, 55, 0.3);
+            box-shadow: 0 20px 50px var(--shadow);
+            background: rgba(255, 255, 255, 0.06);
+        }
+
+       .oracle-icon {
+    margin-bottom: 1.2rem;
+    display: block;
+    transition: transform 0.3s ease;
+}
+.oracle-icon img {
+    width: 48px;
+    height: 48px;
+    object-fit: contain;
+    filter: drop-shadow(0 4px 8px rgba(201, 162, 77, 0.35));
+}
+
+        .oracle-card:hover .oracle-icon {
+            transform: scale(1.08) rotate(5deg);
+        }
+
+        .oracle-name {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 0.8rem;
+            color: var(--text);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .oracle-type {
+            display: inline-block;
+            padding: 6px 16px;
+            background: rgba(212, 175, 55, 0.15);
+            color: var(--gold);
+            font-size: 0.75rem;
+            border-radius: 20px;
+            margin-bottom: 1.2rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            font-weight: 600;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+        }
+
+        .oracle-description {
+            color: var(--text-dim);
+            line-height: 1.7;
+            margin-bottom: 1.8rem;
+            font-size: 1rem;
+        }
+
+        .btn-access {
+            width: 100%;
+            padding: 14px;
+            background: transparent;
+            border: 1.5px solid var(--gold);
+            color: var(--gold);
+            cursor: pointer;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 600;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-access::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: var(--gold);
+            transition: left 0.3s ease;
+            z-index: -1;
+        }
+
+        .btn-access:hover::before {
+            left: 0;
+        }
+
+        .btn-access:hover {
+            color: var(--primary);
+            border-color: var(--gold);
+        }
+
+        /* iFrame Container */
+        .iframe-container {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1000;
+            background: var(--primary);
+        }
+
+        .iframe-container.active {
+            display: block;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .iframe-content {
+            width: 100%;
+            height: calc(100% - 70px);
+            border: none;
+            background: #fff;
+        }
+
+        /* Barra de Navegação Fixa */
+        .nav-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(26, 26, 46, 0.98);
+            backdrop-filter: blur(20px);
+            border-top: 1px solid rgba(212, 175, 55, 0.2);
+            padding: 16px 24px;
+            display: none;
+            align-items: center;
+            justify-content: space-between;
+            z-index: 1001;
+            box-shadow: 0 -4px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .nav-bar.active {
+            display: flex;
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(100%); }
+            to { transform: translateY(0); }
+        }
+
+        .nav-info {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .nav-icon {
+            font-size: 2rem;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+        }
+.nav-icon img {
+    width: 26px;
+    height: 26px;
+    object-fit: contain;
+}
+
+        .nav-text {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .nav-oracle-name {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--gold);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .nav-oracle-type {
+            font-size: 0.75rem;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn-back {
+            padding: 12px 28px;
+            background: var(--gold);
+            color: var(--primary);
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 700;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-size: 0.9rem;
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+        }
+
+        .btn-back:hover {
+            background: var(--text);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(212, 175, 55, 0.5);
+        }
+
+        .btn-back:active {
+            transform: translateY(0);
+        }
+
+        /* Loading Spinner */
+        .loading {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 1002;
+        }
+
+        .loading.active {
+            display: block;
+        }
+
+        .spinner {
+            width: 60px;
+            height: 60px;
+            border: 4px solid rgba(212, 175, 55, 0.1);
+            border-top: 4px solid var(--gold);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Responsivo */
+        @media (max-width: 768px) {
+            .logo {
+                font-size: 2.5rem;
+                letter-spacing: 6px;
+            }
+
+            .welcome-text {
+                font-size: 1.1rem;
+                padding: 0 10px;
+            }
+
+            .btn-explore {
+                padding: 16px 36px;
+                font-size: 1rem;
+            }
+
+            .oracles-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .menu-title {
+                font-size: 1.8rem;
+                letter-spacing: 3px;
+            }
+
+            .menu-subtitle {
+                font-size: 0.95rem;
+            }
+
+            .oracle-card {
+                padding: 28px;
+            }
+
+            .nav-text {
+                display: none;
+            }
+
+            .nav-bar {
+                padding: 12px 16px;
+            }
+
+            .btn-back {
+                padding: 10px 20px;
+                font-size: 0.8rem;
+            }
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* Scroll Suave */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Scrollbar Personalizada */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--primary);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--gold);
+            border-radius: 5px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--text);
+        }
+    </style>
+</head>
+<body>
+    <!-- Tela de Boas-Vindas -->
+    <div id="welcomeScreen" class="welcome-screen">
+        <div class="logo">HUB DA CONSCIÊNCIA</div>
+        <p class="welcome-text">
+            Perguntas abrem portais.<br>
+Ferramentas revelam caminhos.<br>
+Explore oráculos, experiências e leituras simbólicas criadas para escutar o seu momento presente.        </p>
+        <button class="btn-explore" onclick="showOracles()">Acessar Portais</button>
+    </div>
+
+    <!-- Menu de Oráculos -->
+    <div id="oraclesMenu" class="oracles-menu">
+        <div class="container">
+            <div class="menu-header">
+                <h1 class="menu-title">Portais de Consciência</h1>
+                <p class="menu-subtitle">Ferramentas simbólicas para escutar, compreender e atravessar o seu momento.</p>
+<p class="cta-text">Escolha o portal que melhor escuta o seu agora.</p>
+
+            </div>
+
+            <div class="oracles-grid" id="oraclesGrid"></div>
+        </div>
+    </div>
+
+    <!-- Container do iFrame -->
+    <div id="iframeContainer" class="iframe-container">
+        <iframe id="oracleFrame" class="iframe-content" title="Oráculo Ativo"></iframe>
+    </div>
+
+    <!-- Loading -->
+    <div id="loading" class="loading">
+        <div class="spinner"></div>
+    </div>
+
+    <!-- Barra de Navegação Fixa -->
+    <div id="navBar" class="nav-bar">
+        <div class="nav-info">
+            <span class="nav-icon" id="navIcon"></span>
+            <div class="nav-text">
+                <span class="nav-oracle-name" id="navOracleName"></span>
+                <span class="nav-oracle-type" id="navOracleType"></span>
+            </div>
+        </div>
+        <button class="btn-back" onclick="backToHub()" aria-label="Voltar ao Hub">← Voltar ao Hub</button>
+    </div>
+
+    <script>
+        // ===== CONFIGURAÇÃO DOS ORÁCULOS =====
+        // SUBSTITUA AS URLs ABAIXO PELOS SEUS WEBAPPS REAIS
+        const oracles = [
+            {
+                icon: 'https://animadestini.com.br/wp-content/uploads/2026/01/anima-tarot-simbolo.png',
+                name: 'ANIMA TAROT',
+                type: 'Tarot',
+                description: 'Espelhos arquetípicos para suas questões profundas',
+                url: 'https://animatarot.netlify.app/',
+                color: '#9b59b6'
+            },
+            {
+                icon: 'https://animadestini.com.br/wp-content/uploads/2026/01/eglyphos.png',
+                name: 'EGLYPHOS',
+                type: 'Arquétipos',
+                description: 'Mensagens ancestrais através de símbolos sagrados',
+                url: 'https://egyphosoraculo.netlify.app/',
+                color: '#3498db'
+            },
+            {
+                icon: 'https://animadestini.com.br/wp-content/uploads/2026/01/amon.png',
+                name: 'ORÁCULO DE AMON',
+                type: 'Oráculo',
+                description: 'Sabedoria do antigo Egito para decisões presentes',
+                url: 'https://oraculodeamon.netlify.app/',
+                color: '#e67e22'
+            },
+            {
+                icon: 'https://animadestini.com.br/wp-content/uploads/2026/01/Proverbios-biblicos.png',
+                name: 'PROVÉRBIOS BÍBLICOS',
+                type: 'Ritual',
+                description: 'Passagens sagradas que falam ao seu momento',
+                url: 'https://proverbiosbiblicos.netlify.app/',
+                color: '#16a085'
+            },
+            {
+                icon: '☀️',
+                name: 'ORÁCULO DO DIA',
+                type: 'Consciência',
+                description: 'Mensagem diária para guiar seus passos',
+                url: 'https://exemplo.com/oraculo-dia',
+                color: '#f39c12'
+            },
+            {
+                icon: '🏺',
+                name: 'MEDITAÇÕES MARCO AURÉLIO',
+                type: 'Sabedoria',
+                description: 'Reflexões estoicas para fortalecer sua mente',
+                url: 'https://exemplo.com/marco-aurelio',
+                color: '#95a5a6'
+            },
+            {
+                icon: 'https://animadestini.com.br/wp-content/uploads/2026/01/I-CHING.png',
+                name: 'ANIMA I CHING',
+                type: 'Oráculo',
+                description: 'Oráculo milenar chinês sobre as leis da mudança.',
+                url: 'https://animaiching.netlify.app/',
+                color: '#e74c3c'
+            },
+            {
+                icon: '🗝️',
+                name: 'RITUAIS & PORTAIS',
+                type: 'Ritual',
+                description: 'Práticas para transformação e abertura de caminhos',
+                url: 'https://exemplo.com/rituais-portais',
+                color: '#d4af37'
+            },
+            {
+                icon: 'https://animadestini.com.br/wp-content/uploads/2026/01/dodona.png',
+                name: 'ORÁCULO DE DODONA',
+                type: 'Oráculo',
+                description: 'O sussurro das folhas do carvalho sagrado de Zeus',
+                url: 'https://oraculododona.netlify.app/',
+                color: '#27ae60'
+            }
+        ];
+
+        // ===== FUNÇÕES PRINCIPAIS =====
+
+        // Renderizar cards dos oráculos
+        function renderOracles() {
+            const grid = document.getElementById('oraclesGrid');
+            grid.innerHTML = oracles.map((oracle, index) => `
+                <div class="oracle-card" onclick="openOracle(${index})" style="border-left: 4px solid ${oracle.color}">
+                    <span class="oracle-icon"><img src="${oracle.icon}" alt="${oracle.name} símbolo"></span>
+                    <h3 class="oracle-name">${oracle.name}</h3>
+                    <span class="oracle-type">${oracle.type}</span>
+                    <p class="oracle-description">${oracle.description}</p>
+                    <button class="btn-access">Acessar →</button>
+                </div>
+            `).join('');
+        }
+
+        // Mostrar menu de oráculos
+        function showOracles() {
+            document.getElementById('welcomeScreen').classList.add('hidden');
+            document.getElementById('oraclesMenu').classList.add('active');
+            renderOracles();
+        }
+
+        // Abrir oráculo no iframe
+        function openOracle(index) {
+            const oracle = oracles[index];
+            
+            // Mostrar loading
+            document.getElementById('loading').classList.add('active');
+            
+            // Ocultar menu
+            document.getElementById('oraclesMenu').classList.remove('active');
+            
+            // Configurar e mostrar iframe
+            const iframeContainer = document.getElementById('iframeContainer');
+            const iframe = document.getElementById('oracleFrame');
+            
+            iframe.onload = function() {
+                document.getElementById('loading').classList.remove('active');
+            };
+            
+            iframe.src = oracle.url;
+            iframeContainer.classList.add('active');
+            
+            // Atualizar barra de navegação
+          document.getElementById('navIcon').innerHTML = `
+  <img src="${oracle.icon}" alt="${oracle.name} símbolo">
+`;
+            document.getElementById('navOracleName').textContent = oracle.name;
+            document.getElementById('navOracleType').textContent = oracle.type;
+            document.getElementById('navBar').classList.add('active');
+            
+            // Salvar estado no histórico
+            window.history.pushState({ oracle: index }, '', `#oracle-${index}`);
+        }
+
+        // Voltar ao hub
+        function backToHub() {
+            // Limpar iframe
+            const iframe = document.getElementById('oracleFrame');
+            iframe.src = '';
+            
+            // Ocultar loading
+            document.getElementById('loading').classList.remove('active');
+            
+            // Ocultar iframe e navbar
+            document.getElementById('iframeContainer').classList.remove('active');
+            document.getElementById('navBar').classList.remove('active');
+            
+            // Mostrar menu
+            document.getElementById('oraclesMenu').classList.add('active');
+            
+            // Voltar ao estado inicial na URL
+            window.history.pushState({}, '', window.location.pathname);
+        }
+
+        // ===== EVENTOS E INTEGRAÇÕES =====
+
+        // Detectar botão "voltar" do navegador
+        window.addEventListener('popstate', function(event) {
+            if (event.state && event.state.oracle !== undefined) {
+                openOracle(event.state.oracle);
+            } else {
+                const iframeActive = document.getElementById('iframeContainer').classList.contains('active');
+                if (iframeActive) {
+                    backToHub();
+                }
+            }
+        });
+
+        // Atalhos de teclado
+        document.addEventListener('keydown', function(e) {
+            // ESC volta ao hub
+            if (e.key === 'Escape') {
+                const iframeActive = document.getElementById('iframeContainer').classList.contains('active');
+                if (iframeActive) {
+                    backToHub();
+                }
+            }
+        });
+
+        // Detectar se está rodando como PWA
+        if (window.matchMedia('(display-mode: standalone)').matches) {
+            console.log('🚀 ANIMA rodando como PWA instalado');
+        }
+
+        // Prevenir zoom indesejado em mobile
+        document.addEventListener('touchstart', function(e) {
+            if (e.touches.length > 1) {
+                e.preventDefault();
+            }
+        }, { passive: false });
+
+        // Log de inicialização
+        console.log('✨ ANIMA ORÁCULOS inicializado com sucesso');
+        console.log(`📊 ${oracles.length} oráculos disponíveis`);
+    </script>
+</body>
+</html>
